@@ -28,6 +28,15 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
+      - name: Apply custom icon and splash
+        run: |
+          if [ -f icon.png ] || [ -f splash.png ]; then
+            mkdir -p assets
+            [ -f icon.png ] && cp icon.png assets/icon-only.png && cp icon.png assets/icon-foreground.png
+            [ -f splash.png ] && cp splash.png assets/splash.png && cp splash.png assets/splash-dark.png
+            npm i -D @capacitor/assets@3
+            npx capacitor-assets generate --android --iconBackgroundColor '#670a36' --iconBackgroundColorDark '#240513' --splashBackgroundColor '#670a36' --splashBackgroundColorDark '#240513'
+          fi
       - name: Build APK
         run: |
           cd android
